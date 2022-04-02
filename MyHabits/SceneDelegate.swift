@@ -16,8 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
-    }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = CreateRootViewController()
+        window.makeKeyAndVisible()
+        self.window = window
+   }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -48,5 +53,37 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
+}
+
+extension SceneDelegate {
+
+    func CreateRootViewController() -> UIViewController {
+
+        let habitsViewController = HabitsViewController()
+        habitsViewController.tabBarItem = UITabBarItem(title: "Привычки",
+                                                       image: UIImage(named: "habitsIcon"),
+                                                       tag: 0)
+
+        let infoViewController = InfoViewController()
+        infoViewController.tabBarItem = UITabBarItem(title: "Информация",
+                                                     image: UIImage(systemName: "info.circle.fill"),
+                                                     tag: 1)
+
+        let tabBarController = UITabBarController()
+        tabBarController.view.backgroundColor = UIColor(named: "mainBackgroundColor")
+
+        tabBarController.tabBar.backgroundColor = UIColor(named: "tabBarBackgroundColor")
+        tabBarController.tabBar.tintColor = UIColor(named: "purpleColor")
+
+        tabBarController.setViewControllers(
+            [UINavigationController(rootViewController: habitsViewController),
+             UINavigationController(rootViewController: infoViewController)],
+            animated: true)
+
+//        tabBarController.selectedIndex = 1
+
+
+        return tabBarController
+    }
 }
 
