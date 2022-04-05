@@ -16,6 +16,11 @@ struct Fonts {
         createFont(name: "SFProText-Regular", size: 17)
     }
 
+    static var fontSFProTextSemibold13: UIFont {
+        createFont(name: "SFProText-Semibold", size: 13)
+    }
+
+
 
 
 

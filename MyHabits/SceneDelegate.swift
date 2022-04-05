@@ -59,7 +59,7 @@ extension SceneDelegate {
 
     func CreateRootViewController() -> UIViewController {
 
-        let habitsViewController = HabitsViewController()
+        let habitsViewController = HabitViewController()
         habitsViewController.tabBarItem = UITabBarItem(title: "Привычки",
                                                        image: UIImage(named: "habitsIcon"),
                                                        tag: 0)
@@ -70,10 +70,10 @@ extension SceneDelegate {
                                                      tag: 1)
 
         let tabBarController = UITabBarController()
-        tabBarController.view.backgroundColor = UIColor(named: "mainBackgroundColor")
+        tabBarController.view.backgroundColor = .myHabitsColor(.mainBackground)
 
-        tabBarController.tabBar.backgroundColor = UIColor(named: "tabBarBackgroundColor")
-        tabBarController.tabBar.tintColor = UIColor(named: "purpleColor")
+        tabBarController.tabBar.backgroundColor = .myHabitsColor(.tabBarBackground)
+        tabBarController.tabBar.tintColor = .myHabitsColor(.purple)
 
         tabBarController.setViewControllers(
             [UINavigationController(rootViewController: habitsViewController),

@@ -22,15 +22,16 @@ final class HabitsViewController: UIViewController {
         let addBarItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                           style: .plain,
                                           target: self,
-                                          action: #selector(plusButtonTapped))
-        addBarItem.tintColor = UIColor(named: "purpleColor")
+                                         action: #selector(plusButtonTapped))
+        addBarItem.tintColor = .myHabitsColor(.purple)
 
         navigationItem.rightBarButtonItem = addBarItem
     }
 
     @objc
     func plusButtonTapped() {
-//        let infoViewController = InfoViewController()
-//        present(infoViewController, animated: true, completion: nil)
+        let habitViewController = HabitViewController()
+        navigationController?.present(UINavigationController(rootViewController: habitViewController), animated: true, completion: nil)
+//        present(habitViewController, animated: true, completion: nil)
     }
 }

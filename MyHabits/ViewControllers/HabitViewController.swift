@@ -7,23 +7,92 @@
 
 import UIKit
 
-class HabitViewController: UIViewController {
+final class HabitViewController: UIViewController {
+
+    private let modelView = HabitViewModel()
+    private let tableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .systemBackground
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(cancelButtonTapped))
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cохранить",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(saveButtonTapped))
+
+        title = "Создать"
+
+        navigationController?.navigationBar.tintColor = .myHabitsColor(.purple)
+        view.backgroundColor = .myHabitsColor(.mainBackground)
+
+        view.addSubviewsToAutoLayout(tableView)
+
+        setupLayout()
+
+//        habitView.setup(with: Info())
+
+
+
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorStyle = .none
+        tableView.allowsSelection = false
+        tableView.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 0, right: 0)
+        tableView.dataSource = self
     }
+
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc
+    private func cancelButtonTapped() {
+        dismiss(animated: true, completion: nil)
     }
-    */
 
+
+    @objc
+    private func saveButtonTapped() {
+        dismiss(animated: true, completion: nil)
+    }
+ }
+
+// MARK: - UITableViewDataSource methods
+extension HabitViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        modelView.cells.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return modelView.cells[indexPath.row]
+    }
+
+
+    
+
+//    private func createHeader(with title: String) -> UILabel {
+//        let label = UILabel()
+//
+//        label.font = Fonts.fontSFProTextSemibold13
+//        let paragraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.lineHeightMultiple = 1.16 // Line height: 18 pt
+//
+//        label.attributedText = NSMutableAttributedString(string: title,
+//                                                         attributes: [NSAttributedString.Key.kern: -0.08,
+//                                                                      NSAttributedString.Key.paragraphStyle: paragraphStyle])
+//        return label
+//    }
 }
