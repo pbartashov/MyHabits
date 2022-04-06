@@ -7,17 +7,60 @@
 
 import UIKit
 
-final class HabitViewModel {
+protocol HabitViewModelProtocol {
+    var habitName: String { get set }
+    var habitColor: UIColor { get set }
+    var habitDate: Date { get set }
+    var cells: [UITableViewCell] { get }
+}
+
+@objc
+protocol HabitViewModelDelegate {
+    @objc func colorButtonClicked(_ sender: UIButton)
+    @objc func datePickerValueChanged(_ sender: UIDatePicker)
+    @objc func returnPressed(_ sender: UITextField)
+}
+
+final class HabitViewModel: HabitViewModelProtocol {
 
     private enum Constants {
         static let padding: CGFloat = 16
         static let interRowDistance: CGFloat = 15
     }
 
-    var cells = [UITableViewCell]()
-    var owner: UIViewController?
+    private(set) var cells = [UITableViewCell]()
 
-    private lazy var titleField: UITextField = {
+    weak var delegate: HabitViewModelDelegate?
+
+    var habitName: String {
+        get {
+            nameTextField.text ?? ""
+        }
+        set {
+            nameTextField.text = newValue
+        }
+    }
+
+    var habitColor: UIColor {
+        get {
+            colorButton.backgroundColor ?? .myHabitsDefaultColor
+        }
+        set {
+            colorButton.backgroundColor = newValue
+        }
+    }
+
+    var habitDate: Date {
+        get {
+            timePicker.date
+        }
+        set {
+            timePicker.date = newValue
+            updateTimeCell(with: newValue)
+        }
+    }
+
+    private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Бегать по утрам, спать 8 часов и т.п."
         textField.font = Fonts.fontSFProTextRegular17
@@ -31,7 +74,9 @@ final class HabitViewModel {
         //
         //        view.attributedText = NSMutableAttributedString(string: "Бегать по утрам, спать 8 часов и т.п.", attributes: [NSAttributedString.Key.kern: -0.41, NSAttributedString.Key.paragraphStyle: paragraphStyle])
 
-        textField.addTarget(self, action: #selector(HabitViewModel.returnPressed(_:)), for: .editingDidEndOnExit)
+        textField.addTarget(delegate,
+                            action: #selector(HabitViewModelDelegate.returnPressed(_:)),
+                            for: .editingDidEndOnExit)
 
         return textField
     }()
@@ -40,7 +85,9 @@ final class HabitViewModel {
         let button = UIButton()
         button.layer.cornerRadius = 15
 
-        button.addTarget(self, action: #selector(HabitViewModel.colorButtonClicked), for: .touchUpInside)
+        button.addTarget(delegate,
+                         action: #selector(HabitViewModelDelegate.colorButtonClicked(_:)),
+                         for: .touchUpInside)
 
         return button
     }()
@@ -57,37 +104,31 @@ final class HabitViewModel {
         picker.datePickerMode = .time
 
         // Add an event to call onDidChangeDate function when value is changed.
-        picker.addTarget(self, action: #selector(HabitViewModel.datePickerValueChanged(_:)), for: .valueChanged)
+        picker.addTarget(delegate,
+                         action: #selector(HabitViewModelDelegate.datePickerValueChanged(_:)),
+                         for: .valueChanged)
 
         return picker
     }()
 
 
-    init (with habit: Habit? = nil) {
-        cells.append(contentsOf: [createTitleCell(),
+    init (for delegate: HabitViewModelDelegate? = nil) {
+        self.delegate = delegate
+
+        cells.append(contentsOf: [createNameCell(),
                                   createColorCell(),
                                   createTimeCell(),
                                   createTimePickerCell()])
-        var date: Date
+       
 
-        if let habit = habit {
-            titleField.text = habit.name
-            //                isCompleteButton.isSelected = toDo.isComplete
-            colorButton.backgroundColor = habit.color
-            date = habit.date
-        } else {
-            date = .now
-            colorButton.backgroundColor = UIColor(red: 1, green: 0.624, blue: 0.31, alpha: 1)
-        }
-
-        timePicker.date = date
-        updateTimeCell(with: date)
+//        timePicker.date = date
+//        updateTimeCell(with: date)
     }
 
-    private func createTitleCell() -> UITableViewCell {
-        let cell = createCellWith(title: "НАЗВАНИЕ", secondaryView: titleField)
-        titleField.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        titleField.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+    private func createNameCell() -> UITableViewCell {
+        let cell = createCellWith(title: "НАЗВАНИЕ", secondaryView: nameTextField)
+        nameTextField.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        nameTextField.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
 
         return cell
     }
@@ -190,38 +231,9 @@ final class HabitViewModel {
         timeLabel.attributedText = fullString
     }
 
-    @objc
-    func datePickerValueChanged(_ sender: UIDatePicker){
-
-        updateTimeCell(with: sender.date)
-
-    }
-
-    @objc
-    func returnPressed(_ sender: UITextField) {
-        sender.resignFirstResponder()
-    }
-
-    @objc
-    func colorButtonClicked() {
-
-        let picker = UIColorPickerViewController()
-
-        if let color = colorButton.backgroundColor {
-            picker.selectedColor = color
-        }
-
-        owner?.present(picker, animated: true, completion: nil)
-    }
+   
 
 
 }
 
-extension HabitViewModel: UIColorPickerViewControllerDelegate {
 
-    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        colorButton.backgroundColor = viewController.selectedColor
-
-    }
-
-}

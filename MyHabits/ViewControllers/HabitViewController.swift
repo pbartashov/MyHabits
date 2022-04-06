@@ -9,42 +9,67 @@ import UIKit
 
 final class HabitViewController: UIViewController {
 
-    private let modelView = HabitViewModel()
-    private let tableView = UITableView()
+    var habit: Habit?
+
+    private lazy var modelView: HabitViewModelProtocol = HabitViewModel(for: self)
+
+    private lazy var tableView: UITableView = {
+        let table = UITableView()
+
+        table.backgroundColor = .systemBackground
+        table.separatorStyle = .none
+        table.allowsSelection = false
+        table.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 0, right: 0)
+        table.dataSource = self
+
+        return table
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        setupNavigationBar()
 
+        title = habit == nil ? "Создать" : "Править"
+
+        view.backgroundColor = .myHabitsColor(.mainBackground)
+        view.addSubviewsToAutoLayout(tableView)
+
+        setupLayout()
+
+//        habitView.setup(with: Info())
+        setupViewModel()
+
+
+
+
+    }
+
+    private func setupViewModel() {
+        if let habit = habit {
+            modelView.habitName = habit.name
+            modelView.habitColor = habit.color
+            modelView.habitDate = habit.date
+        } else {
+            modelView.habitColor = .myHabitsDefaultColor
+            modelView.habitDate = .now
+        }
+    }
+
+    private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить",
-                                                            style: .plain,
-                                                            target: self,
-                                                            action: #selector(cancelButtonTapped))
+                                                           style: .plain,
+                                                           target: self,
+                                                           action: #selector(cancelButtonTapped))
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cохранить",
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(saveButtonTapped))
 
-        title = "Создать"
-
         navigationController?.navigationBar.tintColor = .myHabitsColor(.purple)
-        view.backgroundColor = .myHabitsColor(.mainBackground)
-
-        view.addSubviewsToAutoLayout(tableView)
-
-        setupLayout()
-
-//        habitView.setup(with: Info())
-
-
-
-        tableView.backgroundColor = .systemBackground
-        tableView.separatorStyle = .none
-        tableView.allowsSelection = false
-        tableView.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 0, right: 0)
-        tableView.dataSource = self
+//        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.backgroundColor = .myHabitsColor(.mainBackground)
     }
 
     private func setupLayout() {
@@ -66,9 +91,22 @@ final class HabitViewController: UIViewController {
 
     @objc
     private func saveButtonTapped() {
+        if habit == nil {
+            habit = Habit(name: modelView.habitName,
+                          date: modelView.habitDate,
+                          color: modelView.habitColor)
+        } else {
+            habit?.name = modelView.habitName
+            habit?.date = modelView.habitDate
+            habit?.color = modelView.habitColor
+
+        }
+
+        HabitsStore.shared.habits.append(habit!)
+
         dismiss(animated: true, completion: nil)
     }
- }
+}
 
 // MARK: - UITableViewDataSource methods
 extension HabitViewController: UITableViewDataSource {
@@ -95,4 +133,36 @@ extension HabitViewController: UITableViewDataSource {
 //                                                                      NSAttributedString.Key.paragraphStyle: paragraphStyle])
 //        return label
 //    }
+}
+
+// MARK: - HabitViewModelDelegate methods
+extension HabitViewController: HabitViewModelDelegate {
+    @objc
+    func datePickerValueChanged(_ sender: UIDatePicker){
+
+        modelView.habitDate = sender.date
+
+    }
+
+    @objc
+    func returnPressed(_ sender: UITextField) {
+        sender.resignFirstResponder()
+    }
+
+    @objc
+    func colorButtonClicked(_ sender: UIButton) {
+
+        let picker = UIColorPickerViewController()
+        picker.delegate = self
+        picker.selectedColor = modelView.habitColor
+
+        present(picker, animated: true, completion: nil)
+    }
+}
+
+// MARK: - UIColorPickerViewControllerDelegate methods
+extension HabitViewController: UIColorPickerViewControllerDelegate {
+    func colorPickerViewControllerDidFinish(_ sender: UIColorPickerViewController) {
+        modelView.habitColor = sender.selectedColor
+    }
 }

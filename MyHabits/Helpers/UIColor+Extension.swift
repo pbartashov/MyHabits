@@ -19,6 +19,10 @@ extension UIColor {
         case tabBarBackground = "tabBarBackgroundColor"
     }
 
+    static var myHabitsDefaultColor: UIColor {
+        myHabitsColor(.orange)
+    }
+
     static func myHabitsColor(_ color: MyHabitsColors) -> UIColor {
         guard let color = UIColor(named: color.rawValue) else {
             fatalError("""
