@@ -199,10 +199,10 @@ class HabitCollectionViewCell: UICollectionViewCell {
 
     @objc
     private func checkmarkButtonTapped() {
-        if !checkmarkButton.isSelected {
+//        if !checkmarkButton.isSelected {
             delegate?.checkmarkTapped(sender: self)
 //            checkmarkButton.isSelected = true
-        }
+//        }
 
         
     }

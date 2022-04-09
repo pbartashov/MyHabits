@@ -14,7 +14,7 @@ final class InfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
+//        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
 
         title = "Информация"
 

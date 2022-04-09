@@ -9,6 +9,11 @@ import UIKit
 
 final class HabitViewController: UIViewController {
 
+    private enum Constants {
+        static let topPadding: CGFloat = 21
+        static let bottomPadding: CGFloat = 18
+    }
+
     var habit: Habit?
 //    weak var delegate: HabitsStoreDelegate?
 
@@ -21,17 +26,47 @@ final class HabitViewController: UIViewController {
         table.separatorStyle = .none
         table.allowsSelection = false
         table.bounces = false
-        table.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 0, right: 0)
+        table.contentInset = UIEdgeInsets(top: Constants.topPadding, left: 0, bottom: 0, right: 0)
         table.dataSource = self
         table.delegate = self
+
+        table.tableHeaderView = .init(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNonzeroMagnitude))
+
+        table.tableFooterView = .init(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNonzeroMagnitude))
+
 //        table.estimatedRowHeight = 62
 
 
         return table
     }()
 
+    private lazy var footerView: UIView = {
+//        let button = UIButton()
+//
+//        button.titleLabel?.font = Fonts.SFProTextRegular17
+//        button.setTitle("Удалить привычку", for: .normal)
+//        button.setTitleColor(.myHabitsColor(.red), for: .normal)
+//
+//        button.backgroundColor = .systemBackground
+//
+//        button.addTarget(self,
+//                         action: #selector(deleteButtonTapped),
+//                         for: .touchUpInside)
+
+        let container = UIView()
+        container.backgroundColor = .systemBackground
+        container.addSubviewsToAutoLayout(deleteButton)
+
+        NSLayoutConstraint.activate([
+            deleteButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            deleteButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -Constants.bottomPadding)
+        ])
+
+        return container
+    }()
+
     private lazy var deleteButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(frame: .init(x: 0, y: 0, width: 147, height: 22))
 
         button.titleLabel?.font = Fonts.SFProTextRegular17
         button.setTitle("Удалить привычку", for: .normal)
@@ -53,7 +88,7 @@ final class HabitViewController: UIViewController {
 
         view.backgroundColor = .myHabitsColor(.mainBackground)
 
-        setupLayout()
+//        setupLayout()
 
 //        habitView.setup(with: Info())
         setupViewModel()
@@ -66,13 +101,15 @@ final class HabitViewController: UIViewController {
         }
 
 
-//        view.addSubviewsToAutoLayout(tableView)
-//        tableView.setConstraintsToSafeArea(of: view)
+        view.addSubviewsToAutoLayout(tableView)
+        tableView.setConstraintsToSafeArea(of: view)
 
 
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         modelView.setFirstResponder()
     }
 
@@ -89,7 +126,7 @@ final class HabitViewController: UIViewController {
 
     private func setupNavigationBar() {
 
-        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
+//        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
 
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить",
@@ -107,47 +144,32 @@ final class HabitViewController: UIViewController {
         navigationController?.navigationBar.backgroundColor = .myHabitsColor(.mainBackground)
     }
 
-    private func setupLayout() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.distribution = .fill
-        stack.alignment = .fill
-
-
-
-        stack.addArrangedSubview(tableView)
-//        stack.addArrangedSubview(deleteButton)
-
-        let container = UIView()
-        container.backgroundColor = .systemBackground
-        container.addSubviewsToAutoLayout(stack)
-
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: container.topAnchor),
-            stack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -18)
-        ])
-
-        
-        view.addSubviewsToAutoLayout(container)
-
-        container.setConstraintsToSafeArea(of: view)
-
-
-
-
-
-
-//        stack.backgroundColor = .red
-//        view.backgroundColor = .green
-
-//        view.addSubviewsToAutoLayout(stack)
-
-
-
-
-    }
+//    private func setupLayout() {
+//        let stack = UIStackView()
+//        stack.axis = .vertical
+//        stack.distribution = .fill
+//        stack.alignment = .fill
+//
+//
+//        stack.addArrangedSubview(tableView)
+////        stack.addArrangedSubview(deleteButton)
+//
+//        let container = UIView()
+//        container.backgroundColor = .systemBackground
+//        container.addSubviewsToAutoLayout(stack)
+//
+//        NSLayoutConstraint.activate([
+//            stack.topAnchor.constraint(equalTo: container.topAnchor),
+//            stack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+//            stack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+//            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -18)
+//        ])
+//
+//
+//        view.addSubviewsToAutoLayout(container)
+//
+//        container.setConstraintsToSafeArea(of: view)
+//    }
 
     
 
@@ -178,8 +200,16 @@ final class HabitViewController: UIViewController {
 
     @objc
     private func deleteButtonTapped() {
+
+        var text = ""
+
+        if let habitName = habit?.name,
+           !habitName.isEmpty {
+            text = " \"\(habitName)\""
+        }
+
         let alert = UIAlertController(title: "Удалить привычку",
-                                      message: "Вы хотите удалить привычку \"\(habit!.name)\"?",
+                                      message: "Вы хотите удалить привычку\(text)?",
                                       preferredStyle: .alert)
 
         let saveAction = UIAlertAction(title: "Удалить",
@@ -236,14 +266,25 @@ extension HabitViewController: UITableViewDataSource {
 extension HabitViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        let height = tableView.bounds.height - tableView.contentSize.height
+//        let height = view.safeAreaLayoutGuide.layoutFrame.height - tableView.contentSize.height
+        if habit == nil {
+            return 0
+        } else {
+            let contentHeight = modelView.cells.reduce(0) { partialResult, cell in
+                partialResult + cell.bounds.height
+            }
 
-        return height < 0 ? 50 : height
+            let height = view.safeAreaLayoutGuide.layoutFrame.height - contentHeight - tableView.contentInset.top
+
+            return max(height, deleteButton.bounds.height + Constants.bottomPadding)
+        }
     }
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
-        deleteButton.backgroundColor = .green
-        return deleteButton
+//        footerView.backgroundColor = .green
+        habit == nil ? nil : footerView
+//        return footerView
     }
 }
 

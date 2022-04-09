@@ -53,7 +53,7 @@ final class HabitDetailsViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
 //        navigationController?.navigationBar.prefersLargeTitles = false
 
-        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
+//        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
 
         let editBarItem = UIBarButtonItem(title: "Править",
                                           style: .plain,

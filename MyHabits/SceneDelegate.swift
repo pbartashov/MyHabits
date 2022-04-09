@@ -18,6 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
+        setAppearance()
+        
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = CreateRootViewController()
         window.makeKeyAndVisible()
@@ -57,7 +59,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 extension SceneDelegate {
 
-    func CreateRootViewController() -> UIViewController {
+    private func CreateRootViewController() -> UIViewController {
 
         let habitsViewController = HabitsViewController()
         habitsViewController.tabBarItem = UITabBarItem(title: "Привычки",
@@ -83,7 +85,36 @@ extension SceneDelegate {
 //        tabBarController.selectedIndex = 1
 
 
+
         return tabBarController
+    }
+
+    private func setAppearance() {
+        let appearance = UINavigationBarAppearance()
+
+        let largeTitleParagraphStyle = NSMutableParagraphStyle()
+        largeTitleParagraphStyle.lineHeightMultiple = 0.99
+
+        appearance.largeTitleTextAttributes = [
+            .font: Fonts.SFProDisplayBold34,
+            .kern: 0.41,
+            .paragraphStyle: largeTitleParagraphStyle
+        ]
+
+
+        let titleParagraphStyle = NSMutableParagraphStyle()
+        titleParagraphStyle.lineHeightMultiple = 1.08
+
+
+        appearance.titleTextAttributes = [
+            .font: Fonts.SFProTextSemibold17,
+            .kern: -0.41,
+            .paragraphStyle: titleParagraphStyle
+        ]
+
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().standardAppearance = appearance
     }
 }
 

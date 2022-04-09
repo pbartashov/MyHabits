@@ -49,15 +49,25 @@ final class HabitsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+
+//        navigationItem.largeTitleDisplayMode = .always
+//        navigationController?.navigationBar.prefersLargeTitles = true
+
         setupNavigationBar()
 
         view.backgroundColor = .myHabitsColor(.mainBackground)
 //        view.addSubviewsToAutoLayout(tableView)
 
+
 //        setupLayout()
         view.addSubviewsToAutoLayout(collectionView)
 
         collectionView.setConstraintsToSafeArea(of: view)
+
+
+
+
+        
 
         addObservers()
     }
@@ -69,8 +79,40 @@ final class HabitsViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
+
+//        UIView.animate(withDuration: 0.5) {
+//            self.navigationController?.navigationBar.sizeToFit()
+//        }
+//
+////        self.navigationController?.navigationBar.sizeToFit()
+//
     }
+
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+////        UIView.animate(withDuration: 1) {
+//            self.navigationController?.navigationBar.sizeToFit()
+////        }
+//    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+
+        super.viewWillTransition(to: size, with: coordinator)
+
+//        navigationItem.largeTitleDisplayMode = .always
+
+        coordinator.animate(alongsideTransition: { _ in
+            self.navigationController?.navigationBar.sizeToFit()
+        }, completion: nil)
+
+//        collectionView.reloadItems(at: collectionView.visibleCells.compactMap { collectionView.indexPath(for: $0) })
+    }
+
+    
 
 //    override func viewWillDisappear(_ animated: Bool) {
 //        navigationController?.navigationBar.prefersLargeTitles = false
@@ -78,13 +120,12 @@ final class HabitsViewController: UIViewController {
 
     private func setupNavigationBar() {
 
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        navigationItem.largeTitleDisplayMode = .always
+
         title = "Сегодня"
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 0.99
-        navigationController?.navigationBar.largeTitleTextAttributes =  [.font: Fonts.SFProDisplayBold34,
-                                                                         .kern: 0.41,
-                                                                         .paragraphStyle: paragraphStyle]
+ 
 
         let addBarItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
                                          style: .plain,
@@ -216,11 +257,14 @@ extension HabitsViewController: HabitCellDelegate {
         if let indexPath = collectionView.indexPath(for: sender) {
             let habit = HabitsStore.shared.habits[indexPath.item]
 
-            if !habit.isAlreadyTakenToday {
+            if habit.isAlreadyTakenToday {
+                HabitsStore.shared.unTrack(from: habit, date: .now)
+            } else {
                 HabitsStore.shared.track(habit)
-                progressView.setup(with: HabitsStore.shared.todayProgress)
-                sender.setup(with: habit)
             }
+
+            progressView.setup(with: HabitsStore.shared.todayProgress)
+            sender.setup(with: habit)
         }
     }
 }
@@ -269,6 +313,11 @@ extension HabitsViewController {
                                        selector:#selector(onRemoveHabit),
                                        name: .habitRemoved,
                                        object: HabitsStore.shared)
+
+        notificationCenter.addObserver(self,
+                                       selector: #selector(onOrientationDidChange),
+                                       name: UIDevice.orientationDidChangeNotification,
+                                       object: nil)
     }
 
     private func removeObservers() {
@@ -279,8 +328,12 @@ extension HabitsViewController {
                                           object: HabitsStore.shared)
 
         notificationCenter.removeObserver(self,
-                                       name: .habitRemoved,
-                                       object: HabitsStore.shared)
+                                          name: .habitRemoved,
+                                          object: HabitsStore.shared)
+
+        notificationCenter.removeObserver(self,
+                                          name: UIDevice.orientationDidChangeNotification,
+                                          object: nil)
     }
 
 
@@ -306,6 +359,17 @@ extension HabitsViewController {
 
     @objc
     func onRemoveHabit() {
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+
+    }
+
+    @objc
+    func onOrientationDidChange() {
+        DispatchQueue.main.async {
+            self.collectionView.reloadItems(at: self.collectionView.visibleCells.compactMap { self.collectionView.indexPath(for: $0) })
+        }
+
     }
 }

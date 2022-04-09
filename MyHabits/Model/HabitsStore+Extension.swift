@@ -40,6 +40,11 @@ extension HabitsStore {
                                         object: self)
     }
 
+    func unTrack(from habit: Habit, date: Date) {
+        habit.trackDates.removeAll { Calendar.current.isDateInToday($0) }
+        save()
+    }
+
 
 
 
