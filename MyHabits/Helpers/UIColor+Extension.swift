@@ -37,43 +37,4 @@ extension UIColor {
         }
         return color
     }
-//
-//
-//
-//        UIColor(named: "")
-//    }
-//
-//    static var myHabbitsIndigoColor: UIColor? {
-//        UIColor(named: "")
-//    }
-//
-//    static var myHabbitsLightGrayColor: UIColor? {
-//        UIColor(named: "")
-//    }
-//
-//    static var myHabbitsMainBackgroundColor: UIColor? {
-//        UIColor(named: "")
-//    }
-//
-//    static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }
-
-//    static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }static var myHabbitsPurpleColor: UIColor? {
-//        UIColor(named: "purpleColor")
-//    }
-
-
 }

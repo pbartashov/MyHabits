@@ -67,20 +67,10 @@ final class HabitViewModel: HabitViewModelProtocol {
         textField.placeholder = "Бегать по утрам, спать 8 часов и т.п."
         textField.font = Fonts.SFProTextRegular17
         textField.textColor = .myHabitsColor(.blue)
-//        textField.setContentHuggingPriority(.init(rawValue: 249), for: .vertical)
-        //        TODO???
-        //        var paragraphStyle = NSMutableParagraphStyle()
-        //        paragraphStyle.lineHeightMultiple = 1.08
-        //
-        //        // Line height: 22 pt
-        //        // (identical to box height)
-        //
-        //        view.attributedText = NSMutableAttributedString(string: "Бегать по утрам, спать 8 часов и т.п.", attributes: [NSAttributedString.Key.kern: -0.41, NSAttributedString.Key.paragraphStyle: paragraphStyle])
 
         textField.addTarget(delegate,
                             action: #selector(HabitViewModelDelegate.returnPressed(_:)),
                             for: .editingDidEndOnExit)
-
         return textField
     }()
 
@@ -91,7 +81,6 @@ final class HabitViewModel: HabitViewModelProtocol {
         button.addTarget(delegate,
                          action: #selector(HabitViewModelDelegate.colorButtonTapped(_:)),
                          for: .touchUpInside)
-
         return button
     }()
 
@@ -100,20 +89,17 @@ final class HabitViewModel: HabitViewModelProtocol {
     private lazy var timePicker: UIDatePicker = {
         let picker = UIDatePicker()
 
-        // Set some of UIDatePicker properties
         picker.timeZone = NSTimeZone.local
         picker.backgroundColor = UIColor.white
         picker.preferredDatePickerStyle = .wheels
         picker.datePickerMode = .time
 
-        // Add an event to call onDidChangeDate function when value is changed.
         picker.addTarget(delegate,
                          action: #selector(HabitViewModelDelegate.datePickerValueChanged(_:)),
                          for: .valueChanged)
 
         return picker
     }()
-
 
     init (for delegate: HabitViewModelDelegate? = nil) {
         self.delegate = delegate
@@ -122,24 +108,15 @@ final class HabitViewModel: HabitViewModelProtocol {
                                   createColorCell(),
                                   createTimeCell(),
                                   createTimePickerCell()])
-       
-
-//        timePicker.date = date
-//        updateTimeCell(with: date)
     }
 
     private func createNameCell() -> UITableViewCell {
         let cell = createCellWith(title: "НАЗВАНИЕ", secondaryView: nameTextField)
-//????????????
-        let heightConstraint = nameTextField.heightAnchor.constraint(equalToConstant: 22)
-        heightConstraint.priority = UILayoutPriority(999)
-        heightConstraint.isActive = true
 
         nameTextField.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -Constants.padding).isActive = true
 
         return cell
     }
-
 
     private func createColorCell() -> UITableViewCell {
         let cell = createCellWith(title: "ЦВЕТ", secondaryView: colorButton)
@@ -171,12 +148,7 @@ final class HabitViewModel: HabitViewModelProtocol {
         ])
 
         return cell
-
     }
-
-    
-
-
 
     private func createCellWith(title: String, secondaryView: UIView) -> UITableViewCell {
         let cell = UITableViewCell()
@@ -207,8 +179,12 @@ final class HabitViewModel: HabitViewModelProtocol {
         paragraphStyle.lineHeightMultiple = 1.16 // Line height: 18 pt
 
         label.attributedText = NSAttributedString(string: title,
-                                                  attributes: [NSAttributedString.Key.kern: -0.08,
-                                                               NSAttributedString.Key.paragraphStyle: paragraphStyle])
+                                                  attributes: [
+                                                    NSAttributedString.Key.kern: -0.08,
+                                                    NSAttributedString.Key.paragraphStyle: paragraphStyle
+                                                  ]
+        )
+
         return label
     }
 
@@ -232,7 +208,6 @@ final class HabitViewModel: HabitViewModelProtocol {
 
         let timeString = NSAttributedString(string: dateFormatter.string(from: date),
                                             attributes: attributes)
-
         fullString.append(timeString)
 
         timeLabel.attributedText = fullString
@@ -241,9 +216,6 @@ final class HabitViewModel: HabitViewModelProtocol {
     func setFirstResponder() {
         nameTextField.becomeFirstResponder()
     }
-   
-
-
 }
 
 

@@ -15,7 +15,6 @@ final class HabitViewController: UIViewController {
     }
 
     var habit: Habit?
-//    weak var delegate: HabitsStoreDelegate?
 
     private lazy var modelView: HabitViewModelProtocol = HabitViewModel(for: self)
 
@@ -34,25 +33,10 @@ final class HabitViewController: UIViewController {
 
         table.tableFooterView = .init(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNonzeroMagnitude))
 
-//        table.estimatedRowHeight = 62
-
-
         return table
     }()
 
     private lazy var footerView: UIView = {
-//        let button = UIButton()
-//
-//        button.titleLabel?.font = Fonts.SFProTextRegular17
-//        button.setTitle("Удалить привычку", for: .normal)
-//        button.setTitleColor(.myHabitsColor(.red), for: .normal)
-//
-//        button.backgroundColor = .systemBackground
-//
-//        button.addTarget(self,
-//                         action: #selector(deleteButtonTapped),
-//                         for: .touchUpInside)
-
         let container = UIView()
         container.backgroundColor = .systemBackground
         container.addSubviewsToAutoLayout(deleteButton)
@@ -77,34 +61,20 @@ final class HabitViewController: UIViewController {
         button.addTarget(self,
                          action: #selector(deleteButtonTapped),
                          for: .touchUpInside)
-
         return button
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupNavigationBar()
-
         view.backgroundColor = .myHabitsColor(.mainBackground)
 
-//        setupLayout()
+        setupNavigationBar()
 
-//        habitView.setup(with: Info())
         setupViewModel()
-
-        if habit == nil {
-            title = "Создать"
-//            deleteButton.isHidden = true
-        } else {
-            title = "Править"
-        }
-
 
         view.addSubviewsToAutoLayout(tableView)
         tableView.setConstraintsToSafeArea(of: view)
-
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -125,9 +95,7 @@ final class HabitViewController: UIViewController {
     }
 
     private func setupNavigationBar() {
-
-//        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
-
+        title = habit == nil ? "Создать" : "Править"
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить",
                                                            style: .plain,
@@ -140,44 +108,13 @@ final class HabitViewController: UIViewController {
                                                             action: #selector(saveButtonTapped))
 
         navigationController?.navigationBar.tintColor = .myHabitsColor(.purple)
-//        navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.backgroundColor = .myHabitsColor(.mainBackground)
     }
-
-//    private func setupLayout() {
-//        let stack = UIStackView()
-//        stack.axis = .vertical
-//        stack.distribution = .fill
-//        stack.alignment = .fill
-//
-//
-//        stack.addArrangedSubview(tableView)
-////        stack.addArrangedSubview(deleteButton)
-//
-//        let container = UIView()
-//        container.backgroundColor = .systemBackground
-//        container.addSubviewsToAutoLayout(stack)
-//
-//        NSLayoutConstraint.activate([
-//            stack.topAnchor.constraint(equalTo: container.topAnchor),
-//            stack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-//            stack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-//            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -18)
-//        ])
-//
-//
-//        view.addSubviewsToAutoLayout(container)
-//
-//        container.setConstraintsToSafeArea(of: view)
-//    }
-
-    
 
     @objc
     private func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
-
 
     @objc
     private func saveButtonTapped() {
@@ -189,18 +126,15 @@ final class HabitViewController: UIViewController {
             habit?.name = modelView.habitName
             habit?.date = modelView.habitDate
             habit?.color = modelView.habitColor
-
         }
 
         HabitsStore.shared.updateStore(with: habit!)
-//        delegate?.updateHabit(habit!)
 
         dismiss(animated: true, completion: nil)
     }
 
     @objc
     private func deleteButtonTapped() {
-
         var text = ""
 
         if let habitName = habit?.name,
@@ -229,14 +163,12 @@ final class HabitViewController: UIViewController {
         alert.addAction(cancelAction)
 
         present(alert, animated: true, completion: nil)
-
-
-
     }
 }
 
 // MARK: - UITableViewDataSource methods
 extension HabitViewController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         modelView.cells.count
     }
@@ -244,29 +176,12 @@ extension HabitViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return modelView.cells[indexPath.row]
     }
-
-
-    
-
-//    private func createHeader(with title: String) -> UILabel {
-//        let label = UILabel()
-//
-//        label.font = Fonts.fontSFProTextSemibold13
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.lineHeightMultiple = 1.16 // Line height: 18 pt
-//
-//        label.attributedText = NSMutableAttributedString(string: title,
-//                                                         attributes: [NSAttributedString.Key.kern: -0.08,
-//                                                                      NSAttributedString.Key.paragraphStyle: paragraphStyle])
-//        return label
-//    }
 }
 
 // MARK: - UITableViewDelegate methods
 extension HabitViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        let height = view.safeAreaLayoutGuide.layoutFrame.height - tableView.contentSize.height
         if habit == nil {
             return 0
         } else {
@@ -281,20 +196,16 @@ extension HabitViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        
-//        footerView.backgroundColor = .green
         habit == nil ? nil : footerView
-//        return footerView
     }
 }
 
 // MARK: - HabitViewModelDelegate methods
 extension HabitViewController: HabitViewModelDelegate {
+
     @objc
     func datePickerValueChanged(_ sender: UIDatePicker){
-
         modelView.habitDate = sender.date
-
     }
 
     @objc
@@ -304,7 +215,6 @@ extension HabitViewController: HabitViewModelDelegate {
 
     @objc
     func colorButtonTapped(_ sender: UIButton) {
-
         let picker = UIColorPickerViewController()
         picker.delegate = self
         picker.selectedColor = modelView.habitColor

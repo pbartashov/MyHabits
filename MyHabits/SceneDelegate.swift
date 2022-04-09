@@ -11,7 +11,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -24,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = CreateRootViewController()
         window.makeKeyAndVisible()
         self.window = window
-   }
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -82,16 +81,13 @@ extension SceneDelegate {
              UINavigationController(rootViewController: infoViewController)],
             animated: true)
 
-//        tabBarController.selectedIndex = 1
-
-
-
         return tabBarController
     }
 
     private func setAppearance() {
         let appearance = UINavigationBarAppearance()
 
+        //largeTitleTextAttributes
         let largeTitleParagraphStyle = NSMutableParagraphStyle()
         largeTitleParagraphStyle.lineHeightMultiple = 0.99
 
@@ -101,10 +97,9 @@ extension SceneDelegate {
             .paragraphStyle: largeTitleParagraphStyle
         ]
 
-
+        //titleTextAttributes
         let titleParagraphStyle = NSMutableParagraphStyle()
         titleParagraphStyle.lineHeightMultiple = 1.08
-
 
         appearance.titleTextAttributes = [
             .font: Fonts.SFProTextSemibold17,
@@ -117,4 +112,3 @@ extension SceneDelegate {
         UINavigationBar.appearance().standardAppearance = appearance
     }
 }
-

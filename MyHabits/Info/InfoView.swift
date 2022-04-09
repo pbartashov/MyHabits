@@ -15,13 +15,13 @@ class InfoView: UITextView {
         self.isEditable = false
         self.backgroundColor = .systemBackground
         self.contentInset = UIEdgeInsets(top: 22, left: 16, bottom: 22, right: 16)
-   }
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(with info: Info) {
+    func setup(with info: InfoModel) {
         let titleParagraphStyle = NSMutableParagraphStyle()
         titleParagraphStyle.lineHeightMultiple = 1.01 // Line height: 24 pt
         titleParagraphStyle.paragraphSpacing = 4
@@ -31,8 +31,8 @@ class InfoView: UITextView {
                                                                 .paragraphStyle: titleParagraphStyle,
                                                                 .font: Fonts.SFProDisplaySemibold20])
 
-        info.paragraphs.forEach { text in
-            fullString.append(createParagraphWith(text: text))
+        info.paragraphs.forEach {
+            fullString.append(createParagraphWith(text: $0))
         }
 
         self.attributedText = fullString

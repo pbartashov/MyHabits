@@ -36,11 +36,6 @@ struct Fonts {
         createFont(name: "SFProText-Semibold", size: 17)
     }
 
-
-
-
-
-
     static func createFont(name: String, size: CGFloat) -> UIFont {
         guard let font = UIFont(name: name, size: size) else {
             fatalError("""

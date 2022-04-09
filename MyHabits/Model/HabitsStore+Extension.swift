@@ -7,11 +7,6 @@
 
 import Foundation
 
-//protocol HabitsStoreDelegate: AnyObject {
-//    func updateHabit(_ habit: Habit)
-//    func removeHabit(_ habit: Habit)
-//}
-
 extension HabitsStore {
     func updateStore(with habit: Habit) {
         let notificationCenter = NotificationCenter.default
@@ -44,27 +39,4 @@ extension HabitsStore {
         habit.trackDates.removeAll { Calendar.current.isDateInToday($0) }
         save()
     }
-
-
-
-
-
-
-    //DELETE
-//    var demoDates: [Date] {
-//        let startDate = Calendar.current.date(byAdding: .day, value: -5, to: .now)
-//
-//        var dates: [Date] = []
-//        var date = startDate!
-//
-//        while date <= .init() {
-//            dates.append(date)
-//            guard let newDate = Calendar.current.date(byAdding: .day, value: 1, to: date) else {
-//                break
-//            }
-//            date = newDate
-//        }
-//
-//        return dates
-//    }
 }

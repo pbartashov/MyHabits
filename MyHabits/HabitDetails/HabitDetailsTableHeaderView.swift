@@ -24,9 +24,6 @@ class HabitDetailsTableHeaderView: UIView {
         super.init(frame: frame)
 
         initialize()
-
-
-//        backgroundColor = .green
     }
 
     required init?(coder: NSCoder) {
@@ -43,7 +40,5 @@ class HabitDetailsTableHeaderView: UIView {
 
             bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 7)
         ])
-
     }
-
 }

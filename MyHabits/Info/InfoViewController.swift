@@ -14,25 +14,11 @@ final class InfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
-
         title = "Информация"
 
         view.addSubviewsToAutoLayout(infoView)
-
-//        setupLayout()
         infoView.setConstraintsToSafeArea(of: view)
 
-
-        infoView.setup(with: Info())
+        infoView.setup(with: InfoModel())
     }
-
-//    private func setupLayout() {
-//        NSLayoutConstraint.activate([
-//            infoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            infoView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            infoView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-//            infoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-//        ])
-//    }
 }

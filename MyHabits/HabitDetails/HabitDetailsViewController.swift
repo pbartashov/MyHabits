@@ -14,14 +14,13 @@ final class HabitDetailsViewController: UIViewController {
             title = habit?.name ?? ""
         }
     }
-//    weak var habitsStoreDelegate: HabitsStoreDelegate?
 
     private lazy var tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
 
         table.backgroundColor = .myHabitsColor(.lightGray)
-//        table.backgroundColor = .red
-//        table.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 0, right: 0)
+        //        table.backgroundColor = .red
+        //        table.contentInset = UIEdgeInsets(top: 21, left: 0, bottom: 0, right: 0)
         table.allowsSelection = false
         table.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         table.dataSource = self
@@ -38,8 +37,8 @@ final class HabitDetailsViewController: UIViewController {
         setupNavigationBar()
 
         view.backgroundColor = .myHabitsColor(.mainBackground)
-        view.addSubviewsToAutoLayout(tableView)
 
+        view.addSubviewsToAutoLayout(tableView)
         tableView.setConstraintsToSafeArea(of: view)
 
         addObservers()
@@ -51,9 +50,6 @@ final class HabitDetailsViewController: UIViewController {
 
     private func setupNavigationBar() {
         navigationItem.largeTitleDisplayMode = .never
-//        navigationController?.navigationBar.prefersLargeTitles = false
-
-//        navigationController?.navigationBar.titleTextAttributes = creatTitleTextAttributes()
 
         let editBarItem = UIBarButtonItem(title: "Править",
                                           style: .plain,
@@ -72,15 +68,12 @@ final class HabitDetailsViewController: UIViewController {
         habitViewController.habit = habit
         navigationController?.present(UINavigationController(rootViewController: habitViewController), animated: true, completion: nil)
     }
-
 }
 
 // MARK: - UITableViewDataSource methods
 extension HabitDetailsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        return HabitsStore.shared.dates.count
-
-        return HabitsStore.shared.dates.count
+        HabitsStore.shared.dates.count
     }
 
     func tableView(_ tableView: UITableView,
@@ -89,39 +82,23 @@ extension HabitDetailsViewController: UITableViewDataSource {
         let date = HabitsStore.shared.dates.sorted(by: >)[indexPath.row]
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.layoutMargins = .zero
-        cell.contentView.layoutMargins = .zero
-
-//        cell.layoutMarginsGuide = .zero
-//        cell.contentView.safeAreaInsets = .zero
-        
 
         var content = cell.defaultContentConfiguration()
         content.attributedText = createTimeString(from: date)
-//        content.imageToTextPadding = 0
-//        content.textToSecondaryTextVerticalPadding = 0
-//        content.textToSecondaryTextHorizontalPadding = 0
-
 
         if let habit = habit,
            HabitsStore.shared.habit(habit, isTrackedIn: date) {
 
             cell.tintColor = .myHabitsColor(.purple)
-//            cell.accessoryView?.backgroundColor = .myHabitsColor(.purple)
             cell.accessoryType = .checkmark
-
         } else {
             cell.accessoryType = .none
         }
 
         cell.contentConfiguration = content
 
-        //        cell.textLabel!.text = "Row \(indexPath.row)"
         return cell
     }
-
-
-
 
     private func createTimeString(from date: Date?) -> NSAttributedString {
         if let date = date {
@@ -130,8 +107,6 @@ extension HabitDetailsViewController: UITableViewDataSource {
             dateFormatter.timeStyle = .none
             dateFormatter.dateStyle = .long
             dateFormatter.locale = Locale(identifier: "ru_RU")
-
-            //            dateFormatter.dateFormat = "d MMMM yyyy"
             dateFormatter.doesRelativeDateFormatting = true
 
             var dateString = dateFormatter.string(from: date)
@@ -193,11 +168,9 @@ extension HabitDetailsViewController {
     }
 
     @objc
-    func onRemoveHabit() {
+    private func onRemoveHabit() {
         DispatchQueue.main.async { [weak self] in
             self?.navigationController?.popViewController(animated: true)
         }
-
     }
 }
-

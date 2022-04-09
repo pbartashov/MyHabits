@@ -15,20 +15,12 @@ class ProgressCollectionViewCell: UICollectionReusableView {
         return progress
     }()
 
-//    private lazy var progressLabel: UILabel = {
-//        let label = createLabel(with: "0%")
-//        label.textAlignment = .right
-//        return label
-//    }()
-
     private lazy var progressLabel = createLabel(with: "0%")
-
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         initialize()
-
     }
 
     required init?(coder: NSCoder) {
@@ -36,7 +28,6 @@ class ProgressCollectionViewCell: UICollectionReusableView {
     }
 
     private func initialize() {
-
         layer.cornerRadius = 8
         layer.masksToBounds = true
         backgroundColor = .systemBackground
@@ -50,13 +41,7 @@ class ProgressCollectionViewCell: UICollectionReusableView {
         stack.addArrangedSubview(createLabel(with: "Всё получится!"))
         stack.addArrangedSubview(progressLabel)
 
-
-
-        
-
         addSubviewsToAutoLayout(stack, progressBar)
-
-        //        setupLayout()
 
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
@@ -70,27 +55,21 @@ class ProgressCollectionViewCell: UICollectionReusableView {
             progressBar.heightAnchor.constraint(equalToConstant: 7),
 
             bottomAnchor.constraint(equalTo: progressBar.bottomAnchor, constant: 15)
-
         ])
-
     }
-
-    //    private func setupLayout() {
-    //
-    //        progressBar.setConstraintsToSafeArea(of: self)
-    //    }
 
     private func createLabel(with title: String) -> UILabel {
         let label = UILabel()
 
         label.textColor = .myHabitsColor(.systemGray2)
         label.font = Fonts.SFProTextSemibold13
-
         label.attributedText = createAttributedString(from: title)
+
         return label
     }
 
     private func createAttributedString(from text: String, alignment: NSTextAlignment = .natural) -> NSAttributedString {
+
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = alignment
         paragraphStyle.lineHeightMultiple = 1.16 // Line height: 18 pt
@@ -100,13 +79,9 @@ class ProgressCollectionViewCell: UICollectionReusableView {
                                                NSAttributedString.Key.paragraphStyle: paragraphStyle])
     }
 
-
-
     func setup(with value: Float) {
         progressLabel.attributedText = createAttributedString(from: "\(Int(value * 100))%",
                                                               alignment: .right)
-
         progressBar.progress = value
     }
-    
 }
