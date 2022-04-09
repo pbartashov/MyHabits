@@ -9,7 +9,8 @@ import UIKit
 
 final class HabitViewController: UIViewController {
 
-    var habit: Habit?
+    weak var habit: Habit?
+    weak var delegate: HabitsStoreDelegate?
 
     private lazy var modelView: HabitViewModelProtocol = HabitViewModel(for: self)
 
@@ -43,6 +44,10 @@ final class HabitViewController: UIViewController {
 
 
 
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        modelView.setFirstResponder()
     }
 
     private func setupViewModel() {
@@ -102,7 +107,7 @@ final class HabitViewController: UIViewController {
 
         }
 
-        HabitsStore.shared.habits.append(habit!)
+        delegate?.updateHabit(habit!)
 
         dismiss(animated: true, completion: nil)
     }
@@ -150,7 +155,7 @@ extension HabitViewController: HabitViewModelDelegate {
     }
 
     @objc
-    func colorButtonClicked(_ sender: UIButton) {
+    func colorButtonTapped(_ sender: UIButton) {
 
         let picker = UIColorPickerViewController()
         picker.delegate = self

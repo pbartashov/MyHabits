@@ -12,11 +12,13 @@ protocol HabitViewModelProtocol {
     var habitColor: UIColor { get set }
     var habitDate: Date { get set }
     var cells: [UITableViewCell] { get }
+
+    func setFirstResponder()
 }
 
 @objc
 protocol HabitViewModelDelegate {
-    @objc func colorButtonClicked(_ sender: UIButton)
+    @objc func colorButtonTapped(_ sender: UIButton)
     @objc func datePickerValueChanged(_ sender: UIDatePicker)
     @objc func returnPressed(_ sender: UITextField)
 }
@@ -86,7 +88,7 @@ final class HabitViewModel: HabitViewModelProtocol {
         button.layer.cornerRadius = 15
 
         button.addTarget(delegate,
-                         action: #selector(HabitViewModelDelegate.colorButtonClicked(_:)),
+                         action: #selector(HabitViewModelDelegate.colorButtonTapped(_:)),
                          for: .touchUpInside)
 
         return button
@@ -231,6 +233,9 @@ final class HabitViewModel: HabitViewModelProtocol {
         timeLabel.attributedText = fullString
     }
 
+    func setFirstResponder() {
+        nameTextField.becomeFirstResponder()
+    }
    
 
 

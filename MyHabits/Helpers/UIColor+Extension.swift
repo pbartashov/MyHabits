@@ -17,6 +17,8 @@ extension UIColor {
         case orange = "orangeColor"
         case purple = "purpleColor"
         case tabBarBackground = "tabBarBackgroundColor"
+        case systemGray = "systemGrayColor"
+        case systemGray2 = "systemGray2Color"
     }
 
     static var myHabitsDefaultColor: UIColor {

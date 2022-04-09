@@ -2,8 +2,6 @@
 //  HabitsStore.swift
 //  MyHabits
 //
-//  Created by Павел Барташов on 26.03.2022.
-//
 
 import UIKit
 
