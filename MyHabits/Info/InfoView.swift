@@ -29,7 +29,7 @@ class InfoView: UITextView {
         let fullString = NSMutableAttributedString(string: "\(info.title)\n",
                                                    attributes: [.kern: 0.38,
                                                                 .paragraphStyle: titleParagraphStyle,
-                                                                .font: Fonts.fontSFProDisplaySemibold20])
+                                                                .font: Fonts.SFProDisplaySemibold20])
 
         info.paragraphs.forEach { text in
             fullString.append(createParagraphWith(text: text))
@@ -48,6 +48,6 @@ class InfoView: UITextView {
         return NSAttributedString(string: "\(text)\n",
                                   attributes: [.kern: -0.41,
                                                .paragraphStyle: paragraphStyle,
-                                               .font: Fonts.fontSFProTextRegular17])
+                                               .font: Fonts.SFProTextRegular17])
     }
 }

@@ -8,27 +8,31 @@
 import UIKit
 
 struct Fonts {
-    static var fontSFProDisplaySemibold20: UIFont {
+    static var SFProDisplaySemibold20: UIFont {
         createFont(name: "SFProDisplay-Semibold", size: 20)
     }
 
-    static var fontSFProTextRegular17: UIFont {
+    static var SFProDisplayBold34: UIFont {
+        createFont(name: "SFProDisplay-Bold", size: 34)
+    }
+
+    static var SFProTextRegular17: UIFont {
         createFont(name: "SFProText-Regular", size: 17)
     }
 
-    static var fontSFProTextRegular12: UIFont {
+    static var SFProTextRegular12: UIFont {
         createFont(name: "SFProText-Regular", size: 12)
     }
 
-    static var fontSFProTextRegular13: UIFont {
+    static var SFProTextRegular13: UIFont {
         createFont(name: "SFProText-Regular", size: 13)
     }
 
-    static var fontSFProTextSemibold13: UIFont {
+    static var SFProTextSemibold13: UIFont {
         createFont(name: "SFProText-Semibold", size: 13)
     }
 
-    static var fontSFProTextSemibold17: UIFont {
+    static var SFProTextSemibold17: UIFont {
         createFont(name: "SFProText-Semibold", size: 17)
     }
 

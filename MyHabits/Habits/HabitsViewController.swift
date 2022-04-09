@@ -51,8 +51,6 @@ final class HabitsViewController: UIViewController {
 
         setupNavigationBar()
 
-        title = "Сегодня"
-        
         view.backgroundColor = .myHabitsColor(.mainBackground)
 //        view.addSubviewsToAutoLayout(tableView)
 
@@ -60,17 +58,39 @@ final class HabitsViewController: UIViewController {
         view.addSubviewsToAutoLayout(collectionView)
 
         collectionView.setConstraintsToSafeArea(of: view)
+
+        addObservers()
     }
+
+    deinit {
+        removeObservers()
+
+
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
+//    override func viewWillDisappear(_ animated: Bool) {
+//        navigationController?.navigationBar.prefersLargeTitles = false
+//    }
 
     private func setupNavigationBar() {
 
-        navigationController?.navigationBar.prefersLargeTitles = true
+        title = "Сегодня"
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 0.99
+        navigationController?.navigationBar.largeTitleTextAttributes =  [.font: Fonts.SFProDisplayBold34,
+                                                                         .kern: 0.41,
+                                                                         .paragraphStyle: paragraphStyle]
 
         let addBarItem = UIBarButtonItem(image: UIImage(systemName: "plus"),
-                                          style: .plain,
-                                          target: self,
+                                         style: .plain,
+                                         target: self,
                                          action: #selector(plusButtonTapped))
-//        addBarItem.tintColor = .myHabitsColor(.purple)
+        //        addBarItem.tintColor = .myHabitsColor(.purple)
 
         navigationItem.rightBarButtonItem = addBarItem
 
@@ -80,10 +100,10 @@ final class HabitsViewController: UIViewController {
     }
 
     @objc
-    func plusButtonTapped() {
+    private func plusButtonTapped() {
         let habitViewController = HabitViewController()
-        habitViewController.delegate = self
-        navigationController?.present(UINavigationController(rootViewController: habitViewController), animated: true, completion: nil)
+//        habitViewController.delegate = self
+        present(UINavigationController(rootViewController: habitViewController), animated: true, completion: nil)
 //        present(habitViewController, animated: true, completion: nil)
     }
 }
@@ -126,6 +146,18 @@ extension HabitsViewController: UICollectionViewDataSource {
 
 
 
+}
+
+// MARK: - UICollectionViewDelegate methods
+extension HabitsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        collectionView.deselectItem(at: indexPath, animated: true)
+
+        let habitDetailsViewController = HabitDetailsViewController()
+        habitDetailsViewController.habit = HabitsStore.shared.habits[indexPath.item]
+        navigationController?.pushViewController(habitDetailsViewController, animated: true)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout methods
@@ -183,6 +215,7 @@ extension HabitsViewController: HabitCellDelegate {
     func checkmarkTapped(sender: HabitCollectionViewCell) {
         if let indexPath = collectionView.indexPath(for: sender) {
             let habit = HabitsStore.shared.habits[indexPath.item]
+
             if !habit.isAlreadyTakenToday {
                 HabitsStore.shared.track(habit)
                 progressView.setup(with: HabitsStore.shared.todayProgress)
@@ -192,32 +225,87 @@ extension HabitsViewController: HabitCellDelegate {
     }
 }
 
-// MARK: - HabitsStoreDelegate methods
-extension HabitsViewController: HabitsStoreDelegate {
-    func updateHabit(_ habit: Habit) {
+//// MARK: - HabitsStoreDelegate methods
+//extension HabitsViewController: HabitsStoreDelegate {
+//    func updateHabit(_ habit: Habit) {
+//
+//        var habits = HabitsStore.shared.habits
+//
+//        if let habitIndex = habits.firstIndex(of: habit) {
+//            habits[habitIndex] = habit
+//
+//            let indexPath = IndexPath(item: habitIndex, section: 0)
+//            collectionView.reloadItems(at: [indexPath])
+//        } else {
+//            HabitsStore.shared.habits.append(habit)
+//
+//            let indexPath =  IndexPath(item: habits.count, section: 0)
+//            collectionView.insertItems(at: [indexPath])
+//        }
+//
+//
+//
+//
+//    }
+//
+//    func removeHabit(_ sender: Habit) {
+//
+//    }
+//
+//
+//}
 
-        var habits = HabitsStore.shared.habits
+// MARK: - NotificationCenter observers
+extension HabitsViewController {
+    private func addObservers() {
+        let notificationCenter = NotificationCenter.default
 
-        if let habitIndex = habits.firstIndex(of: habit) {
-            habits[habitIndex] = habit
+        notificationCenter.addObserver(self,
+                                       selector:#selector(onUpdateHabit(_:)),
+                                       name: .habitUpdated,
+                                       object: HabitsStore.shared)
 
-            let indexPath = IndexPath(item: habitIndex, section: 0)
-            collectionView.reloadItems(at: [indexPath])
-        } else {
-            HabitsStore.shared.habits.append(habit)
+        notificationCenter.addObserver(self,
+                                       selector:#selector(onRemoveHabit),
+                                       name: .habitRemoved,
+                                       object: HabitsStore.shared)
+    }
 
-            let indexPath =  IndexPath(item: habits.count, section: 0)
-            collectionView.insertItems(at: [indexPath])
+    private func removeObservers() {
+        let notificationCenter = NotificationCenter.default
+
+        notificationCenter.removeObserver(self,
+                                          name: .habitUpdated,
+                                          object: HabitsStore.shared)
+
+        notificationCenter.removeObserver(self,
+                                       name: .habitRemoved,
+                                       object: HabitsStore.shared)
+    }
+
+
+
+    @objc
+    private func onUpdateHabit(_ notification: Notification) {
+
+        if let userInfo = notification.userInfo,
+           let habitIndex = userInfo["habitIndex"] as? Int,
+           let isNew = userInfo["isNew"] as? Bool {
+
+            let indexPath =  IndexPath(item: habitIndex, section: 0)
+
+            if isNew {
+                collectionView.insertItems(at: [indexPath])
+            } else {
+                collectionView.reloadItems(at: [indexPath])
+            }
+
+            progressView.setup(with: HabitsStore.shared.todayProgress)
         }
-
-
-
-
     }
 
-    func removeHabit(_ sender: Habit) {
-        
+    @objc
+    func onRemoveHabit() {
+        collectionView.reloadData()
     }
-
-
 }

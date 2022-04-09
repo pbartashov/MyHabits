@@ -19,6 +19,8 @@ extension UIColor {
         case tabBarBackground = "tabBarBackgroundColor"
         case systemGray = "systemGrayColor"
         case systemGray2 = "systemGray2Color"
+        case tableSectionHeaderTex = "tableSectionHeaderTextColor"
+        case red = "redColor"
     }
 
     static var myHabitsDefaultColor: UIColor {

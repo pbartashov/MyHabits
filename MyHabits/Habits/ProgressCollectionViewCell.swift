@@ -84,7 +84,7 @@ class ProgressCollectionViewCell: UICollectionReusableView {
         let label = UILabel()
 
         label.textColor = .myHabitsColor(.systemGray2)
-        label.font = Fonts.fontSFProTextSemibold13
+        label.font = Fonts.SFProTextSemibold13
 
         label.attributedText = createAttributedString(from: title)
         return label

@@ -18,7 +18,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
     private let nameLabel: UILabel = {
         let label = UILabel()
 
-        label.font = Fonts.fontSFProTextSemibold17
+        label.font = Fonts.SFProTextSemibold17
 //        label.textColor = .myHabitsColor(.blue)
 
         //        label.setContentHuggingPriority(.init(rawValue: 249), for: .horizontal)
@@ -30,7 +30,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
     private let timeLabel: UILabel = {
         let label = UILabel()
 
-        label.font = Fonts.fontSFProTextRegular12
+        label.font = Fonts.SFProTextRegular12
         label.textColor = .myHabitsColor(.systemGray2)
 
         return label
@@ -39,7 +39,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
     private let counterLabel: UILabel = {
         let label = UILabel()
 
-        label.font = Fonts.fontSFProTextRegular13
+        label.font = Fonts.SFProTextRegular13
         label.textColor = .myHabitsColor(.systemGray)
 
         return label
@@ -161,7 +161,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         nameLabel.textColor = habit.color
         nameLabel.attributedText = createNameString(from: habit.name)
 
-        timeLabel.attributedText = createTimeString(from: habit.date)
+        timeLabel.attributedText = createTimeString(from: habit.dateString)
 
         counterLabel.attributedText = createCounterString(from: "Счётчик: \(habit.trackDates.count)")
 
@@ -170,29 +170,32 @@ class HabitCollectionViewCell: UICollectionViewCell {
     }
 
     private func createNameString(from text: String) -> NSAttributedString {
-        createAttributedString(from: text, lineHeightMultiple: 1.08, kern: -0.41)
+        NSAttributedString(from: text, lineHeightMultiple: 1.08, kern: -0.41)
     }
 
-    private func createTimeString(from date: Date) -> NSAttributedString {
-        let dateFormatter: DateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm a"
-        
-        return createAttributedString(from: "Каждый день в \(dateFormatter.string(from: date))",
-                                      lineHeightMultiple: 1.12, kern: 0.0)
+    private func createTimeString(from text: String) -> NSAttributedString {
+//    private func createTimeString(from date: Date) -> NSAttributedString {
+//        let dateFormatter: DateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "hh:mm a"
+//
+//        return NSAttributedString(from: "Каждый день в \(dateFormatter.string(from: date))",
+//                                  lineHeightMultiple: 1.12)
+        NSAttributedString(from: text, lineHeightMultiple: 1.12)
+
     }
 
     private func createCounterString(from text: String) -> NSAttributedString {
-        createAttributedString(from: text, lineHeightMultiple: 1.16, kern: -0.08)
+        NSAttributedString(from: text, lineHeightMultiple: 1.16, kern: -0.08)
     }
 
-    private func createAttributedString(from text: String, lineHeightMultiple: CGFloat, kern: NSNumber) -> NSAttributedString {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = lineHeightMultiple
-
-        return NSAttributedString(string: text,
-                                  attributes: [NSAttributedString.Key.kern: kern,
-                                               NSAttributedString.Key.paragraphStyle: paragraphStyle])
-    }
+//    private func createAttributedString(from text: String, lineHeightMultiple: CGFloat, kern: NSNumber) -> NSAttributedString {
+//        let paragraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.lineHeightMultiple = lineHeightMultiple
+//
+//        return NSAttributedString(string: text,
+//                                  attributes: [NSAttributedString.Key.kern: kern,
+//                                               NSAttributedString.Key.paragraphStyle: paragraphStyle])
+//    }
 
     @objc
     private func checkmarkButtonTapped() {

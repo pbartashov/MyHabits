@@ -65,8 +65,9 @@ final class HabitViewModel: HabitViewModelProtocol {
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Бегать по утрам, спать 8 часов и т.п."
-        textField.font = Fonts.fontSFProTextRegular17
+        textField.font = Fonts.SFProTextRegular17
         textField.textColor = .myHabitsColor(.blue)
+//        textField.setContentHuggingPriority(.init(rawValue: 249), for: .vertical)
         //        TODO???
         //        var paragraphStyle = NSMutableParagraphStyle()
         //        paragraphStyle.lineHeightMultiple = 1.08
@@ -129,8 +130,12 @@ final class HabitViewModel: HabitViewModelProtocol {
 
     private func createNameCell() -> UITableViewCell {
         let cell = createCellWith(title: "НАЗВАНИЕ", secondaryView: nameTextField)
-        nameTextField.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        nameTextField.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+//????????????
+        let heightConstraint = nameTextField.heightAnchor.constraint(equalToConstant: 22)
+        heightConstraint.priority = UILayoutPriority(999)
+        heightConstraint.isActive = true
+
+        nameTextField.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -Constants.padding).isActive = true
 
         return cell
     }
@@ -147,7 +152,7 @@ final class HabitViewModel: HabitViewModelProtocol {
     private func createTimeCell() -> UITableViewCell {
         let cell = createCellWith(title: "ВРЕМЯ", secondaryView: timeLabel)
         timeLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        timeLabel.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -Constants.padding).isActive = true
 
         return cell
     }
@@ -197,7 +202,7 @@ final class HabitViewModel: HabitViewModelProtocol {
     private func createHeader(with title: String) -> UILabel {
         let label = UILabel()
 
-        label.font = Fonts.fontSFProTextSemibold13
+        label.font = Fonts.SFProTextSemibold13
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.16 // Line height: 18 pt
 
@@ -215,7 +220,7 @@ final class HabitViewModel: HabitViewModelProtocol {
         paragraphStyle.lineHeightMultiple = 1.08 // Line height: 22 pt
 
         var attributes: [NSAttributedString.Key: Any] = [
-            .font: Fonts.fontSFProTextRegular17,
+            .font: Fonts.SFProTextRegular17,
             .kern: -0.41,
             .paragraphStyle: paragraphStyle
         ]
