@@ -58,13 +58,6 @@ final class HabitsViewController: UIViewController {
         removeObservers()
    }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        navigationItem.largeTitleDisplayMode = .always
-        navigationController?.navigationBar.prefersLargeTitles = true
-    }
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 
         super.viewWillTransition(to: size, with: coordinator)
@@ -75,6 +68,9 @@ final class HabitsViewController: UIViewController {
     }
 
     private func setupNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+        
         title = "Сегодня"
 
         let addBarItem = UIBarButtonItem(image: UIImage(systemName: "plus"),

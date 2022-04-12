@@ -11,7 +11,7 @@ extension NSAttributedString {
     convenience public init(from text: String, lineHeightMultiple: CGFloat, kern: NSNumber = 0.0) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = lineHeightMultiple
-        paragraphStyle.lineBreakMode = .byWordWrapping
+        paragraphStyle.lineBreakMode = .byTruncatingTail
 
         self.init(string: text,
                   attributes: [NSAttributedString.Key.kern: kern,

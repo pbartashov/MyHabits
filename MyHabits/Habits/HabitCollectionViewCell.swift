@@ -87,13 +87,15 @@ class HabitCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            nameLabel.trailingAnchor.constraint(greaterThanOrEqualTo: checkmarkButton.leadingAnchor, constant: -40),
+            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: checkmarkButton.leadingAnchor, constant: -40),
 
             timeLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             timeLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             timeLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             timeLabel.heightAnchor.constraint(equalToConstant: 16),
             
+            counterLabel.topAnchor.constraint(lessThanOrEqualTo: timeLabel.bottomAnchor, constant: 30),
+            counterLabel.topAnchor.constraint(greaterThanOrEqualTo: timeLabel.bottomAnchor, constant: 8),
             counterLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             counterLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             counterLabel.heightAnchor.constraint(equalToConstant: 18),
