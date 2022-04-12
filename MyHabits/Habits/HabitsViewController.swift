@@ -65,6 +65,8 @@ final class HabitsViewController: UIViewController {
         coordinator.animate(alongsideTransition: { _ in
             self.navigationController?.navigationBar.sizeToFit()
         }, completion: nil)
+
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
 
     private func setupNavigationBar() {
@@ -173,11 +175,6 @@ extension HabitsViewController {
                                        selector:#selector(onRemoveHabit),
                                        name: .habitRemoved,
                                        object: HabitsStore.shared)
-
-        notificationCenter.addObserver(self,
-                                       selector: #selector(onOrientationDidChange),
-                                       name: UIDevice.orientationDidChangeNotification,
-                                       object: nil)
     }
 
     private func removeObservers() {
@@ -190,11 +187,8 @@ extension HabitsViewController {
         notificationCenter.removeObserver(self,
                                           name: .habitRemoved,
                                           object: HabitsStore.shared)
-
-        notificationCenter.removeObserver(self,
-                                          name: UIDevice.orientationDidChangeNotification,
-                                          object: nil)
     }
+    
     @objc
     private func onUpdateHabit(_ notification: Notification) {
 
@@ -218,13 +212,6 @@ extension HabitsViewController {
     func onRemoveHabit() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
-        }
-    }
-
-    @objc
-    func onOrientationDidChange() {
-        DispatchQueue.main.async {
-            self.collectionView.reloadItems(at: self.collectionView.visibleCells.compactMap { self.collectionView.indexPath(for: $0) })
         }
     }
 }
