@@ -40,7 +40,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    let checkmarkButton: UIButton = {
+    lazy var checkmarkButton: UIButton = {
         let button = UIButton(type: .custom)
         
         let configuration = UIImage.SymbolConfiguration(pointSize: 36)

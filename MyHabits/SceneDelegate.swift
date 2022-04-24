@@ -61,6 +61,7 @@ extension SceneDelegate {
     private func CreateRootViewController() -> UIViewController {
 
         let habitsViewController = HabitsViewController()
+        habitsViewController.title = "Сегодня"
         habitsViewController.tabBarItem = UITabBarItem(title: "Привычки",
                                                        image: UIImage(named: "habitsIcon"),
                                                        tag: 0)
